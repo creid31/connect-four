@@ -1,0 +1,9 @@
+
+<%= form_tag("/users", method: "post") do %>
+  <%= label_tag(:player_one, "First Player:") %>
+  <%= text_field_tag(:player_one) %>
+
+  <%= label_tag(:player_two, "Second Player:") %>
+  <%= text_field_tag(:player_two) %>
+  <%= submit_tag("Start Game") %>
+<% end %>
