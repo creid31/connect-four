@@ -1,0 +1,16 @@
+%h4 Current Player
+%p= @current_player
+
+= form_tag(game_make_move_path) do
+  = label_tag(:row_id, "Row")
+  = select_tag(:row_id, options_for_select((0..@row - 1).to_a))
+  = label_tag(:col_id, "Column")
+  = select_tag(:col_id, options_for_select((0..@col - 1).to_a))
+  = submit_tag("Make Next Move")
+- if !@slots.nil?
+  %table
+    %tbody
+      - @slots.each do |row|
+        %tr
+          - row.each do |slot|
+            %td= slot

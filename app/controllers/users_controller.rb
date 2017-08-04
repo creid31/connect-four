@@ -12,6 +12,6 @@ class UsersController < ApplicationController
     User.create(name: params[:player_two],
                 color: :red,
                 game_record: current_game)
-    redirect_to game_board_path
+    redirect_to game_start_board_path
   end
 end
