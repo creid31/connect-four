@@ -1,1 +1,5 @@
-= render 'board'
+- if !@winner.nil?
+  %h4 Winner is:
+  %p= @winner.name
+- else
+  = render 'board'

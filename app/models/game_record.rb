@@ -29,8 +29,45 @@ class GameRecord < ApplicationRecord
   def next_player
     current_player = users.where(currently_playing: true).first
     next_player = users.where(currently_playing: false).first
-    current_player.currently_playing = false
-    next_player.currently_playing = true
+    current_player.update(currently_playing: false)
+    next_player.update(currently_playing: true)
     return current_player, next_player
   end
+
+
+    def check_for_win(curr_slot)
+      x = curr_slot.x_coordinate
+      y = curr_slot.y_coordinate
+
+      rows = (0..num_rows - 1).to_a.reverse
+      cols = (0..num_cols - 1).to_a
+
+      user = nil
+      # horizontal
+      horizontal_count = 0
+      cols.each do |col|
+        slot = board_slots.where(y_coordinate: y, x_coordinate: col).first
+        # next if slot.eql?(curr_slot)
+        break if slot.user.nil?
+        horizontal_count = 0 if user != slot.user
+        horizontal_count += 1
+        user = slot.user
+      end
+      return user if horizontal_count >= 4
+
+      # vertical
+      vertical_count = 0
+      rows.each do |row|
+        slot = board_slots.where(y_coordinate: row, x_coordinate: x).first
+        # next if slot.eql?(curr_slot)
+        break if slot.user.nil?
+        vertical_count = 0 if user != slot.user
+        vertical_count += 1
+        user = slot.user
+      end
+      return user if vertical_count >= 4
+
+      # diagonal left
+      # diagonal right
+    end
 end

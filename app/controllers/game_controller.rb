@@ -16,7 +16,7 @@ class GameController < ApplicationController
     @current_game = GameRecord.current_game
     @player_one = @current_game.users.where(color: :blue).first
     @player_one.update(currently_playing: true)
-    @current_player = @player_one.name
+    @current_player = @player_one
     @row = @current_game.num_rows
     @col = @current_game.num_cols
     @slots = @current_game.generate_board_slots(@row, @col)
@@ -26,25 +26,10 @@ class GameController < ApplicationController
     @current_game = GameRecord.current_game
     @row = @current_game.num_rows
     @col = @current_game.num_cols
-    previous_player, next_player = @current_game.next_player
-    row_id = params[:row_id]
-    col_id = params[:col_id]
-    next_slot = BoardSlot.where(x_coordinate: col_id,
-                                y_coordinate: row_id,
-                                game_record: @current_game).first
-    byebug
-
-    if !next_slot.user.nil?
-      @current_player = previous_player.name
-      flash[:alert] = 'Spot already taken please try again'
-    else
-      previous_player.save!
-      next_player.save!
-
-      next_slot.update(user: previous_player)
-
-      @current_player = next_player.name
-    end
+    previous_player, @current_player = @current_game.next_player
+    slot = BoardSlot.next_slot(params[:col_id], @current_game.id, @row)
+    slot.update(user: previous_player)
+    @winner = @current_game.check_for_win(slot)
     @slots = @current_game.retrieve_slots
   end
 end
