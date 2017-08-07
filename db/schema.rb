@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170805212734) do
+ActiveRecord::Schema.define(version: 20170807054321) do
 
   create_table "board_slots", force: :cascade do |t|
     t.integer "x_coordinate"
@@ -19,6 +19,7 @@ ActiveRecord::Schema.define(version: 20170805212734) do
     t.integer "game_record_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "final"
     t.index ["game_record_id"], name: "index_board_slots_on_game_record_id"
     t.index ["user_id"], name: "index_board_slots_on_user_id"
   end
@@ -38,6 +39,7 @@ ActiveRecord::Schema.define(version: 20170805212734) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "currently_playing", default: false
+    t.boolean "ai"
     t.index ["game_record_id"], name: "index_users_on_game_record_id"
   end
 
