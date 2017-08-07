@@ -19,14 +19,6 @@ class GameRecord < ApplicationRecord
     }.to_a
   end
 
-  def retrieve_slots
-    board = Matrix.build(num_rows, num_cols) { nil }.to_a
-    board_slots.each do |slot|
-      board[slot.y_coordinate][slot.x_coordinate] = slot.appearance
-    end
-    board.to_a
-  end
-
   def next_player
     current_player = users.where(currently_playing: true).first
     next_player = users.where(currently_playing: false).first
@@ -80,7 +72,7 @@ class GameRecord < ApplicationRecord
 
   def score_board
     score = 0
-    board = retrieve_slots
+    board = BoardSlot.pretty_print_slots(self)
     score += horizontal_score(board)
     score += vertical_score(board)
     score += diag_up_right_score(board)

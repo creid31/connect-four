@@ -32,7 +32,6 @@ class GameController < ApplicationController
       _previous_player, @next_player = current_game.next_player
       @winner = current_game.check_for_win(slot)
     end
-
-    @slots = current_game.retrieve_slots
+    @slots = BoardSlot.pretty_print_slots(current_game)
   end
 end
