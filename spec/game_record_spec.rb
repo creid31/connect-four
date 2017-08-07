@@ -27,14 +27,14 @@ RSpec.describe GameRecord, :type => :model do
 
   describe '#diag_up_right_score' do
     it 'scores board as -100' do
-      score = game_record.diag_up_right_score(@board)
+      score = game_record.diag_down_score(@board)
       expect(score).to eq(-100)
     end
   end
 
   describe '#diag_down_left_score' do
     it 'scores board as 92' do
-      score = game_record.diag_down_left_score(@board)
+      score = game_record.diag_up_score(@board)
       expect(score).to eq(92)
     end
   end

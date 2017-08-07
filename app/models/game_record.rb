@@ -31,23 +31,24 @@ class GameRecord < ApplicationRecord
     x = curr_slot.x_coordinate
     y = curr_slot.y_coordinate
 
-    rows = (0..num_rows - 1).to_a.reverse
-    cols = (0..num_cols - 1).to_a
-
-    user = check_horizontal(cols, y)
+    user = check_horizontal(y)
     return user unless user.nil?
 
-    user = check_vertical(rows, x)
+    user = check_vertical(x)
     return user unless user.nil?
-    # diagonal left
-    # diagonal right
+
+    board = BoardSlot.pretty_print_slots(self)
+    user = check_diag_down(board)
+    return user unless user.nil?
+
+    user = check_diag_up(board)
+    return user unless user.nil?
   end
 
-  def check_horizontal(columns, y)
+  def check_horizontal(y)
     user = nil
-    # horizontal
     horizontal_count = 0
-    columns.each do |col|
+    (0..num_cols - 1).to_a.each do |col|
       slot = board_slots.where(y_coordinate: y, x_coordinate: col).first
       break if slot.user.nil?
       horizontal_count = 0 if user != slot.user
@@ -57,10 +58,10 @@ class GameRecord < ApplicationRecord
     return user if horizontal_count >= 4
   end
 
-  def check_vertical(rows, x)
+  def check_vertical(x)
     user = nil
     vertical_count = 0
-    rows.each do |row|
+    (0..num_rows - 1).to_a.reverse.each do |row|
       slot = board_slots.where(y_coordinate: row, x_coordinate: x).first
       break if slot.user.nil?
       vertical_count = 0 if user != slot.user
@@ -69,6 +70,35 @@ class GameRecord < ApplicationRecord
     end
     return user if vertical_count >= 4
   end
+
+  def check_diag_down(board)
+    user = nil
+    (0..num_cols - 4).each do |x|
+      (0..num_rows - 4).each do |y|
+        user = check_win_in_set([board[y][x],
+                                 board[y + 1][x + 1],
+                                 board[y + 2][x + 2],
+                                 board[y + 3][x + 3]])
+        return user unless user.nil?
+      end
+    end
+    user
+  end
+
+  def check_diag_up(board)
+    user = nil
+    (0..num_cols - 4).each do |x|
+      (3..num_rows - 1).each do |y|
+        user = check_win_in_set([board[y][x],
+                                 board[y - 1][x + 1],
+                                 board[y - 2][x + 2],
+                                 board[y - 3][x + 3]])
+        return user unless user.nil?
+      end
+    end
+    user
+  end
+
 
   def score_board
     score = 0
@@ -107,7 +137,7 @@ class GameRecord < ApplicationRecord
     score
   end
 
-  def diag_up_right_score(board)
+  def diag_down_score(board)
     score = 0
     (0..num_cols - 4).each do |x|
       (0..num_rows - 4).each do |y|
@@ -120,7 +150,7 @@ class GameRecord < ApplicationRecord
     score
   end
 
-  def diag_down_left_score(board)
+  def diag_up_score(board)
     score = 0
     (0..num_cols - 4).each do |x|
       (3..num_rows - 1).each do |y|
@@ -151,5 +181,19 @@ class GameRecord < ApplicationRecord
       score = 10**(red - 1)
     end
     score
+  end
+
+  def check_win_in_set(set_of_four)
+    # opponent
+    blue = 0
+    # ai
+    red = 0
+    set_of_four.each do |slot|
+      blue += 1 if slot == 'blue'
+      red += 1 if slot == 'red'
+    end
+    byebug if blue >= 4 || red >= 4
+    return users.blue.first if blue == 4
+    return users.red.first if red == 4
   end
 end
