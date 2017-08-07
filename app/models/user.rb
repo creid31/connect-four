@@ -22,14 +22,17 @@ class User < ApplicationRecord
     (0..max_col).each do |ai_x|
       ai_slot = BoardSlot.next_slot(ai_x, game_record)
       ai_slot.update(user: self, final: false)
+      score = 0
       (0..max_col).each do |opp_x|
         opp_slot = BoardSlot.next_slot(opp_x, game_record)
         opp_slot.update(user: opponent, final: false)
-        score = game_record.score_board
-        possible_moves[ai_x] = score
+        score += game_record.score_board
         BoardSlot.where(final: false).update_all(user_id: nil)
       end
+      possible_moves[ai_x] = score
+
     end
+    byebug
     # maximum score of all moves is the one the AI should taken
     max_score = possible_moves.values.max
     ai_col = possible_moves.key(max_score)

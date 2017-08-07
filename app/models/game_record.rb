@@ -124,7 +124,6 @@ class GameRecord < ApplicationRecord
     score = 0
     (0..num_cols - 4).each do |x|
       (3..num_rows - 1).each do |y|
-        # puts("x: #{x} & y: #{y}")
         score += score_set_of_four([board[y][x],
                                     board[y - 1][x + 1],
                                     board[y - 2][x + 2],
@@ -145,10 +144,11 @@ class GameRecord < ApplicationRecord
       red += 1 if slot == 'red'
     end
     score = 0
-    if blue > 0
-      score = (-10)**blue
+    if blue > 0 && red > 0
+    elsif blue > 0
+      score = -(10**(blue - 1))
     elsif red > 0
-      score = 10**red
+      score = 10**(red - 1)
     end
     score
   end
