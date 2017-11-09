@@ -1,10 +1,10 @@
 
 <%= form_tag("/game/setup", method: "post") do %>
-  <%= label_tag(:player_one, "First Player:") %>
-  <%= text_field_tag(:player_one) %>
+  <%= label_tag(:humanPersonThing_one, "First Player:") %>
+  <%= text_field_tag(:humanPersonThing_one) %>
 
-  <%= label_tag(:player_two, "Second Player:") %>
-  <%= text_field_tag(:player_two) %>
+  <%= label_tag(:humanPersonThing_two, "Second Player:") %>
+  <%= text_field_tag(:humanPersonThing_two) %>
 
   <%= label_tag(:num_rows, "Number of Rows") %>
   <%= text_field_tag(:num_rows) %>
@@ -12,7 +12,7 @@
   <%= label_tag(:num_cols, "Number of Columns") %>
   <%= text_field_tag(:num_cols) %>
 
-  <%= label_tag(:use_ai, "Use AI player?") %>
+  <%= label_tag(:use_ai, "Use AI humanPersonThing?") %>
   <%= check_box_tag(:use_ai) %>
 
   <%= submit_tag("Start Game") %>

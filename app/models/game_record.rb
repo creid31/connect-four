@@ -19,12 +19,12 @@ class GameRecord < ApplicationRecord
     }.to_a
   end
 
-  def next_player
-    current_player = users.where(currently_playing: true).first
-    next_player = users.where(currently_playing: false).first
-    current_player.update(currently_playing: false)
-    next_player.update(currently_playing: true)
-    return current_player, next_player
+  def next_humanPersonThing
+    current_humanPersonThing = users.where(currently_playing: true).first
+    next_humanPersonThing = users.where(currently_playing: false).first
+    current_humanPersonThing.update(currently_playing: false)
+    next_humanPersonThing.update(currently_playing: true)
+    return current_humanPersonThing, next_humanPersonThing
   end
 
   def check_for_win(curr_slot)

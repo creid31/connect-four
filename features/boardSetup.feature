@@ -1,9 +1,9 @@
 Feature: Board Setup
-  As a game player, I want my board to be setup accurately.
+  As a game humanPersonThing, I want my board to be setup accurately.
 
   Scenario: Initial Setup
     Given I navigate to the initial game page
-    When I enter valid players
+    When I enter valid humanPersonThings
     Then the board with 7 columns and 6 rows should load
 
   Scenario Outline: Player Valid Move

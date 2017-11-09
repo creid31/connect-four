@@ -1,6 +1,6 @@
 %h4 Current Player
-%p= @next_player.name
-%p= @next_player.color
+%p= @next_humanPersonThing.name
+%p= @next_humanPersonThing.color
 
 = form_tag(game_make_move_path) do
   = label_tag(:col_id, "Column")
